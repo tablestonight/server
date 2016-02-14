@@ -1,0 +1,33 @@
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
+// var db = require('./server/database.js');
+
+var server = require('http').Server(app);
+
+// var routes = require('./server/routes.js');
+
+// var keys = require('./server/securityKeys.js');
+
+// if (process.env.PORT) {
+//   keys = require('./server/exampleSecurityKeys.js');
+// }
+
+app.use(bodyParser.json());
+
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    next();
+};
+
+app.use(allowCrossDomain);
+
+// app.use(routes);
+
+var port = process.env.PORT || 1337;
+
+server.listen(port, function() {
+	console.log('Express server listening on port ' + server.address().port);
+});
