@@ -1,11 +1,11 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
-// var db = require('./server/database.js');
+var db = require('./database/database.config');
 
 var server = require('http').Server(app);
 
-// var routes = require('./server/routes.js');
+var routes = require('./routes');
 
 // var keys = require('./server/securityKeys.js');
 
@@ -24,7 +24,7 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-// app.use(routes);
+app.use(routes);
 
 var port = process.env.PORT || 1337;
 
