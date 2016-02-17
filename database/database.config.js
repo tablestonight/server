@@ -1,13 +1,18 @@
-var mongoose = require('mongoose');
+(function() {
+  var mongoose = require('mongoose');
+  var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/tablesTonight';
+  var dbConnection = null;
 
-var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/tablesTonight';
+  initializeDbConnection();
+  module.exports.db = dbConnection;
 
-mongoose.connect(dbUrl);
+  function initializeDbConnection() {
+    mongoose.connect(dbUrl);
+    dbConnection = mongoose.connection;
+    dbConnection.on('error', console.error.bind(console, 'connection error:'));
+    dbConnection.once('open', function() {
+      console.log("database connected!");
+    });
+  }
 
-module.exports.db = mongoose.connection;
-
-module.exports.db.on('error', console.error.bind(console, 'connection error:'));
-
-module.exports.db.once('open', function() {
-  console.log("database connected!");
-});
+})();
