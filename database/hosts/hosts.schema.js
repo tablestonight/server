@@ -17,8 +17,6 @@ var hostSchema = mongoose.Schema({
 	nickName: String,
 	description: String,
 	socialMedia: {},
-	schedule: {}
-
 });
 
 module.exports.Hosts = mongoose.model('Hosts', hostSchema);
@@ -36,15 +34,5 @@ module.exports.Hosts = mongoose.model('Hosts', hostSchema);
 // 	"socialMedia": {
 // 		"twitter": "@jrobot",
 // 		"instagram": "@jrobot"
-// 	},
-// 	"schedule": {
-// 		"sunday": ["XS"],
-// 		"monday": [],
-// 		"tuesday": ["Wet Republic", "XS"],
-// 		"wednesday": [],
-// 		"thursday": ["XS"],
-// 		"friday": ["Wet Republic"],
-// 		"saturday": [],
-// 		"sunday": []
 // 	}
 // }

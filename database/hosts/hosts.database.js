@@ -20,15 +20,6 @@
 			socialMedia: {
 				instagram: '',
 				twitter: ''
-			},
-			schedule: {
-				'SUNDAY': [],
-				'MONDAY': [],
-				'TUESDAY': [],
-				'WEDNESDAY': [],
-				'THURSDAY': [],
-				'FRIDAY': [],
-				'SATURDAY': []
 			}
 		});
 		bcrypt.genSalt(10, function(error, salt) {
@@ -91,7 +82,6 @@
 					host.nickName    = info.nickName;
 					host.description = info.description;
 					host.socialMedia = info.socialMedia;
-					host.schedule    = info.schedule;
 					host.save(function (error, updatedHost) {
 						if (error) {
 							response.send(error);
