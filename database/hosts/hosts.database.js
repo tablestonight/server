@@ -1,6 +1,7 @@
 (function() {
 	var schema = require('./hosts.schema');
 	var bcrypt = require('bcrypt');
+	var Q = require("q");
 
 	module.exports.createHost = createHost;
 	module.exports.loginHost  = loginHost;
@@ -22,22 +23,57 @@
 				twitter: ''
 			}
 		});
-		bcrypt.genSalt(10, function(error, salt) {
-			bcrypt.hash(info.password, salt, function(err, hash) {
-				if (error) {
-					response.send(error);
-					return;
-				}
+
+		createSalt()
+			.then(function(salt) {
+				return hashPassword(salt);
+			})
+			.then(function(hash) {
 				newHost.password = hash;
-				newHost.save(function (error) {
-					if (error) {
-						response.send(error);
-						return;
-					}
-					response.send(newHost);
-				});
+				return saveNewHost();
+			})
+			.then(function(newHost) {
+				return response.send(newHost);
+			})
+			.fail(function(error) {
+				return response.send(error);
+			})
+
+		function saveNewHost() {
+			var deferred = Q.defer();
+			newHost.save(function (error) {
+				if (error) {
+					deferred.reject(error);
+				} else {
+					deferred.resolve(newHost);
+				}
 			});
-		});
+			return deferred.promise;
+		}
+
+		function hashPassword(salt) {
+			var deferred = Q.defer();
+			bcrypt.hash(info.password, salt, function(error, hash) {
+				if (error) {
+					deferred.reject(error);
+				} else {
+					deferred.resolve(hash);
+				}
+			});
+			return deferred.promise;
+		}
+
+		function createSalt() {
+			var deferred = Q.defer();
+			bcrypt.genSalt(10, function(error, salt) {
+				if (error) {
+					deferred.reject(error);
+				} else {
+					deferred.resolve(salt);
+				}
+			});
+			return deferred.promise;
+		}
 	};
 
 	function loginHost(info, response) {
