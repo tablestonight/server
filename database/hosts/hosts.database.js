@@ -20,11 +20,14 @@
 		return deferred.promise;
 	}
 
-	function hashPassword(salt, info) {
+	function hashPassword(salt, info, newHost) {
 		var deferred = Q.defer();
 		bcrypt.hash(info.password, salt, function(error, hash) {
 			if (error) {
 				return deferred.reject(error);
+			}
+			if (!newHost) {
+				return deferred.resolve(info.password);
 			}
 			return deferred.resolve(hash);
 		});
@@ -37,7 +40,8 @@
 
 		createSalt()
 			.then(function(salt) {
-				return hashPassword(salt, info);
+				var newHost = true;
+				return hashPassword(salt, info, newHost);
 			})
 			.then(function(hash) {
 				return saveNewHost(hash);
@@ -116,11 +120,11 @@
 
 		function verifyPassword(host, info) {
 			var deferred = Q.defer();
-			bcrypt.compare(info.password, host.password, function(error, passwordMached) {
+			bcrypt.compare(info.password, host.password, function(error, passwordMatched) {
 				if (error) {
 					return deferred.reject(error);
 				}
-				if (passwordMached) {
+				if (passwordMatched) {
 					return deferred.resolve(host);
 				}
 				return deferred.reject('Incorrect credentials. Please try again.')
@@ -139,7 +143,8 @@
 				return createSalt();
 			})
 			.then(function(salt) {
-				return hashPassword(salt, info);
+				var newHost = false;
+				return hashPassword(salt, info, newHost);
 			})
 			.then(function(hash) {
 				return updateHost(hash, info, host);
