@@ -7,6 +7,8 @@
 	module.exports.loginHost  = loginHost;
 	module.exports.updateHost = updateHost;
 
+	///////////////////////////////////////////////////////////////////////////
+
 	function createSalt() {
 		var deferred = Q.defer();
 		bcrypt.genSalt(10, function(error, salt) {
@@ -44,7 +46,7 @@
 				return response.send(newHost);
 			})
 			.fail(function(error) {
-				return response.send(error);
+				return response.send({error: error});
 			});
 
 		///////////////////////////////////////////////////////////////////////////
@@ -107,7 +109,7 @@
 				response.send(host);
 			})
 			.fail(function(error) {
-				response.send(error);
+				response.send({error: error});
 			});
 
 		///////////////////////////////////////////////////////////////////////////
@@ -146,7 +148,7 @@
 				return response.send(updatedHost);
 			})
 			.fail(function(error) {
-				return response.send(error);
+				return response.send({error: error});
 			});
 
 		///////////////////////////////////////////////////////////////////////////
