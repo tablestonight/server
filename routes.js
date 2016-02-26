@@ -18,5 +18,15 @@
 		hostDb.updateHost(info, response);
 	});
 
+	router.get('/dayclub/:name', function(request, response) {
+		var dayclub = request.params.name;
+		hostDb.findDayclubHosts(dayclub, response);
+	});
+
+	router.get('/nightclub/:name', function(request, response) {
+		var nightclub = request.params.name;
+		hostDb.findNightclubHosts(nightclub, response);
+	});
+
 	module.exports = router;
 })();

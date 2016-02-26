@@ -3,9 +3,11 @@
 	var bcrypt = require('bcrypt');
 	var Q = require("q");
 
-	module.exports.createHost = createHost;
-	module.exports.loginHost  = loginHost;
-	module.exports.updateHost = updateHost;
+	module.exports.createHost         = createHost;
+	module.exports.loginHost          = loginHost;
+	module.exports.updateHost         = updateHost;
+	module.exports.findDayclubHosts   = findDayclubHosts;
+	module.exports.findNightclubHosts = findNightclubHosts;
 
 	///////////////////////////////////////////////////////////////////////////
 
@@ -181,4 +183,48 @@
 		}
 
 	};
+
+	function findDayclubHosts(dayclub, response) {
+
+		getHostsforDayclub(dayclub)
+			.then(function(hosts) {
+				return response.send(hosts);
+			})
+			.fail(function(error) {
+				return response.send({error: error});
+			});
+
+		function getHostsforDayclub(dayclub) {
+			var deferred = Q.defer();
+			schema.Hosts.where({ dayClub: dayclub }).find(function(error, hosts) {
+				if (error) {
+					return deferred.reject(error);
+				}
+				return deferred.resolve(hosts);
+			});
+			return deferred.promise;
+		}
+	}
+
+	function findNightclubHosts(nightclub, response) {
+
+		getHostsforNightclub(nightclub)
+			.then(function(hosts) {
+				return response.send(hosts);
+			})
+			.fail(function(error) {
+				return response.send({error: error});
+			});
+
+		function getHostsforNightclub(nightclub) {
+			var deferred = Q.defer();
+			schema.Hosts.where({ nightClub: nightclub }).find(function(error, hosts) {
+				if (error) {
+					return deferred.reject(error);
+				}
+				return deferred.resolve(hosts);
+			});
+			return deferred.promise;
+		}
+	}
 })();
