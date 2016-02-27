@@ -29,10 +29,7 @@
 	});
 
 	router.get('/origin', function(request, response) {
-		if (process.env.ORIGIN_URL) {
-			return response.send(process.env.ORIGIN_URL);
-		}
-		return response.send(null);
+		return response.send('http://localhost:1337/');
 	});
 
 	module.exports = router;
