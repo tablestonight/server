@@ -28,5 +28,12 @@
 		hostDb.findNightclubHosts(nightclub, response);
 	});
 
+	router.get('/origin', function(request, response) {
+		if (process.env.ORIGIN_URL) {
+			return response.send(process.env.ORIGIN_URL);
+		}
+		return response.send(null);
+	});
+
 	module.exports = router;
 })();
