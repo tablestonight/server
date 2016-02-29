@@ -5,10 +5,7 @@
 		firstName: String,
 		lastName: String,
 		nightClub: String,
-		mobile: {
-			type: String,
-			unique: true
-		},
+		mobile: String,
 		email: {
 			type: String,
 			unique: true
