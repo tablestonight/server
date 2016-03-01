@@ -23,7 +23,7 @@
     app.use(express.static(__dirname + '/client'));
 
     app.get('/', function(request, response) {
-      response.render('index', { uuid: request.params.uuid });
+      response.render('index');
     });
 
     var port = process.env.PORT || 1337;
