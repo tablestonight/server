@@ -18,6 +18,11 @@
 		hostDb.updateHost(info, response);
 	});
 
+	router.post('/host/verify', function(request, response) {
+		var info = request.body;
+		hostDb.verifyHost(info, response);
+	});
+
 	router.get('/dayclub/:name', function(request, response) {
 		var dayclub = request.params.name;
 		hostDb.findDayclubHosts(dayclub, response);

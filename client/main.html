@@ -1,0 +1,11 @@
+<div ng-controller="main">
+	<span ng-if="verified == undefined">
+		loading...
+	</span>
+	<span ng-if="verified == true">
+		Your account is now verified! You are now able to log in.
+	</span>
+	<span ng-if="verified == false">
+		Error verifying your account. Please try again later.
+	</span>
+</div>

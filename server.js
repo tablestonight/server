@@ -18,6 +18,13 @@
     app.use(bodyParser.json());
     app.use(allowCrossDomain);
     app.use(routes);
+    app.set('view engine', 'jade');
+    app.set('views', __dirname + '/client');
+    app.use(express.static(__dirname + '/client'));
+
+    app.get('/', function(request, response) {
+      response.render('index', { uuid: request.params.uuid });
+    });
 
     var port = process.env.PORT || 1337;
     server.listen(port, function() {

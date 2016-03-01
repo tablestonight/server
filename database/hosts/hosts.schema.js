@@ -15,6 +15,8 @@
 		nickName: String,
 		description: String,
 		socialMedia: {},
+		confirmed: Boolean,
+		uuid: String
 	});
 
 	module.exports.Hosts = mongoose.model('Hosts', hostSchema);

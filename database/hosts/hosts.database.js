@@ -2,9 +2,13 @@
 	var schema = require('./hosts.schema');
 	var bcrypt = require('bcrypt');
 	var Q = require("q");
+	var nodemailer = require('nodemailer');
+	var transporter = nodemailer.createTransport(process.env.GMAIL_TRANSPORT);
+	var uuid = require('node-uuid');
 
 	module.exports.createHost         = createHost;
 	module.exports.loginHost          = loginHost;
+	module.exports.verifyHost         = verifyHost;
 	module.exports.updateHost         = updateHost;
 	module.exports.findDayclubHosts   = findDayclubHosts;
 	module.exports.findNightclubHosts = findNightclubHosts;
@@ -71,13 +75,15 @@
 				socialMedia: {
 					instagram: '',
 					twitter: ''
-				}
+				},
+				confirmed: false
 			});
 		}
 
 		function saveNewHost(hash) {
 			var deferred = Q.defer();
 			newHost.password = hash;
+			newHost.uuid = uuid.v4();
 			newHost.save(function (error) {
 				if (error) {
 					if (error.code === 11000) {
@@ -85,10 +91,28 @@
 					}
 					return deferred.reject(error);
 				}
+				sendConfirmationEmail(newHost.email, newHost.uuid);
 				return deferred.resolve(newHost);
 			});
 			return deferred.promise;
 		}
+	}
+
+	function sendConfirmationEmail(email, uuid) {
+		var mailOptions = {
+		    from: '"Connect Vegas Bot" <contact.connect.vegas@gmail.com>',
+		    to: email,
+		    subject: 'Welcome to Connect Vegas | Verify your account',
+		    html: '<b>Thanks for signing up! </b> Please verify your account by clicking the link below:<br /><a href="' + process.env.URL + uuid + '">Verify your account</a>'
+		};
+
+		// send mail with defined transport object
+		transporter.sendMail(mailOptions, function(error, info){
+		    if(error){
+		        return console.log(error);
+		    }
+		    console.log('Message sent: ' + info.response);
+		});
 	}
 
 	function findExistingHost(info) {
@@ -101,6 +125,20 @@
 				return deferred.resolve(host);
 			}
 			return deferred.reject('E-mail not found. Please try again.');
+		});
+		return deferred.promise;
+	}
+
+	function findExistingHostByUuid(info) {
+		var deferred = Q.defer();
+		schema.Hosts.where({ uuid: info.uuid}).findOne(function(error, host) {
+			if (error) {
+				return deferred.reject(error);
+			}
+			if (host) {
+				return deferred.resolve(host);
+			}
+			return deferred.reject('Account not found. Please try again.');
 		});
 		return deferred.promise;
 	}
@@ -127,6 +165,11 @@
 					return deferred.reject(error);
 				}
 				if (passwordMatched) {
+
+					if (!host.confirmed) {
+						return deferred.reject('You must verify your account via e-mail.');
+					}
+
 					return deferred.resolve(host);
 				}
 				return deferred.reject('Incorrect credentials. Please try again.')
@@ -134,6 +177,31 @@
 			return deferred.promise;
 		}
 	};
+
+	function verifyHost(info, response) {
+		findExistingHostByUuid(info)
+			.then(function(host) {
+				return enableHost(host)
+			})
+			.then(function() {
+				response.send(null);
+			})
+			.fail(function(error) {
+				response.send({error: error});
+			});
+
+		function enableHost(host) {
+			var deferred = Q.defer();
+			host.confirmed = true;
+			host.save(function(error) {
+				if (!error) {
+					return deferred.resolve(null);
+				}
+				return deferred.reject(error);
+			});
+			return deferred.promise;
+		}
+	}
 
 	function updateHost(info, response) {
 
