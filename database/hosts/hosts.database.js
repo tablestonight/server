@@ -53,7 +53,7 @@
 				return saveNewHost(hash);
 			})
 			.then(function(newHost) {
-				return response.send(newHost);
+				return response.send(true);
 			})
 			.fail(function(error) {
 				return response.send({error: error});
