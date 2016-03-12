@@ -5,6 +5,7 @@
 	var nodemailer = require('nodemailer');
 	var transporter = nodemailer.createTransport(process.env.GMAIL_TRANSPORT);
 	var uuid = require('node-uuid');
+	var Nightclubs = require('./../locations/nightclubs/nightclubs.info');
 
 	module.exports.createHost         = createHost;
 	module.exports.loginHost          = loginHost;
@@ -290,7 +291,10 @@
 				if (error) {
 					return deferred.reject(error);
 				}
-				return deferred.resolve(hosts);
+				var nightclubInfo = {};
+				nightclubInfo.hosts = hosts;
+				nightclubInfo.info = Nightclubs.list[nightclub];
+				return deferred.resolve(nightclubInfo);
 			});
 			return deferred.promise;
 		}
