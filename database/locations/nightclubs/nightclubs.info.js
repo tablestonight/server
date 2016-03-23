@@ -48,7 +48,7 @@
 				'Lavishly-appointed dance club & lounge with poolside seating & pole dancers in a hipster scene.',
 				'Encore',
 				'Wednesday, Friday, Saturday: 11pm - Close',
-				'Home of: Dillion Francis, Skrillex, DJ Snake and more!');
+				'Dillion Francis, Skrillex, DJ Snake and more!');
 
 			createProperty('Marquee',
 				'Trendy, happening casino club with global DJs, high-tech effects, multiple dance floors & pool deck.',
@@ -79,7 +79,7 @@
 				'Renowned London-based Asian-fusion brand presents this massive MGM Grand nightclub, lounge.',
 				'MGM Grand',
 				'Thursday - Sunday: 11pm - Close',
-				'Home of: Tiesto, Calvin Harris, Steve Aoki and more!');
+				'Tiesto, Calvin Harris, Steve Aoki and more!');
 
 			createProperty('Foxtail',
 				'Nightclub exuding style, sophistication and luxury with an edge.',

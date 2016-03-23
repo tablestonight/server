@@ -43,7 +43,7 @@
 				'Indoor-outdoor beach club venue at Encore offering expansive pool, cabanas & top dance DJs.',
 				'Encore',
 				'Friday: 12pm - 6pm, Saturday - Sunday: 11AM - 6PM',
-				'Home of: Zedd, Diplo, Avicci and more!');
+				'Zedd, Diplo, Avicci and more!');
 
 			createProperty('Foxtail Pool Club',
 				'Lounge and eatery on a pool deck serving American cuisine and seafood, plus specialty cocktails.',
@@ -89,7 +89,7 @@
 				'Bustling, sprawling dayclub offering multiple pools, top dance DJs, cabanas, daybeds & lounge.',
 				'MGM Grand',
 				'Friday - Monday: 11am - Close',
-				'Home of: Tiesto, Steve Aoki, Hardwell and more!');
+				'Tiesto, Steve Aoki, Hardwell and more!');
 
 		}
 	}
