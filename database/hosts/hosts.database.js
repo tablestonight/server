@@ -232,6 +232,20 @@
 
 		function updateHost(hash, info, host) {
 			var deferred = Q.defer();
+			var updateClubs = false;
+			var updateDay = false;
+			var updateNight = false;
+
+			if (host.nightClub !== info.nightClub) {
+				updateClubs = true;
+				updateNight = true;
+			}
+
+			if (host.dayClub !== info.dayClub) {
+				updateClubs = true;
+				updateDay = true;
+			}
+
 			host.password    = hash;
 			host.firstName   = info.firstName;
 			host.lastName    = info.lastName;
@@ -243,16 +257,73 @@
 			host.description = info.description;
 			host.socialMedia = info.socialMedia;
 
-			host.save(function (error) {
-				if (error) {
-					return deferred.reject(error);
+			if (!updateClubs) {
+				host.save(function (error) {
+					if (error) {
+						return deferred.reject(error);
+					}
+					return deferred.resolve(host);
+				});
+			} else {
+
+				var clubList = [getHostsforNightclub(host.nightClub)];
+				if (host.dayClub) {
+					clubList.push(getHostsforDayclub(host.dayClub));
 				}
-				return deferred.resolve(host);
-			});
+
+				Q.all(clubList)
+					.then(function(response) {
+						var nightClubCount = response[0].hosts.length;
+
+						if (updateNight) {
+							if (nightClubCount !== 0) {
+								host.nightClubRank = nightClubCount + 1;
+							} else {
+								host.nightClubRank = 1;
+							}
+						}
+
+						var dayClubCount = response[0].hosts.length;
+
+						if (updateDay) {
+							if (dayClubCount !== 0) {
+								host.dayClubRank = dayClubCount + 1;
+							} else {
+								host.dayClubRank = 1;
+							}
+						}
+
+						host.save(function (error) {
+							if (error) {
+								return deferred.reject(error);
+							}
+							return deferred.resolve(host);
+						});
+					})
+					.fail(function(error) {
+						return deferred.reject(error);
+					});
+
+			}
+
 			return deferred.promise;
 		}
 
 	};
+
+	function getHostsforDayclub(dayclub) {
+		var deferred = Q.defer();
+		schema.Hosts.where({ dayClub: dayclub }).find(function(error, hosts) {
+			if (error) {
+				return deferred.reject(error);
+			}
+			var dayclubInfo = {};
+			dayclubInfo.hosts = hosts;
+			dayclubInfo.info = Dayclubs.list[dayclub];
+			return deferred.resolve(dayclubInfo);
+		});
+		return deferred.promise;
+	}
 
 	function findDayclubHosts(dayclub, response) {
 
@@ -264,19 +335,20 @@
 				return response.send({error: error});
 			});
 
-		function getHostsforDayclub(dayclub) {
-			var deferred = Q.defer();
-			schema.Hosts.where({ dayClub: dayclub }).find(function(error, hosts) {
-				if (error) {
-					return deferred.reject(error);
-				}
-				var dayclubInfo = {};
-				dayclubInfo.hosts = hosts;
-				dayclubInfo.info = Dayclubs.list[dayclub];
-				return deferred.resolve(dayclubInfo);
-			});
-			return deferred.promise;
-		}
+	}
+
+	function getHostsforNightclub(nightclub) {
+		var deferred = Q.defer();
+		schema.Hosts.where({ nightClub: nightclub }).find(function(error, hosts) {
+			if (error) {
+				return deferred.reject(error);
+			}
+			var nightclubInfo = {};
+			nightclubInfo.hosts = hosts;
+			nightclubInfo.info = Nightclubs.list[nightclub];
+			return deferred.resolve(nightclubInfo);
+		});
+		return deferred.promise;
 	}
 
 	function findNightclubHosts(nightclub, response) {
@@ -288,19 +360,5 @@
 			.fail(function(error) {
 				return response.send({error: error});
 			});
-
-		function getHostsforNightclub(nightclub) {
-			var deferred = Q.defer();
-			schema.Hosts.where({ nightClub: nightclub }).find(function(error, hosts) {
-				if (error) {
-					return deferred.reject(error);
-				}
-				var nightclubInfo = {};
-				nightclubInfo.hosts = hosts;
-				nightclubInfo.info = Nightclubs.list[nightclub];
-				return deferred.resolve(nightclubInfo);
-			});
-			return deferred.promise;
-		}
 	}
 })();

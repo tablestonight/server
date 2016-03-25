@@ -5,6 +5,7 @@
 		firstName: String,
 		lastName: String,
 		nightClub: String,
+		nightClubRank: Number,
 		mobile: String,
 		email: {
 			type: String,
@@ -12,6 +13,7 @@
 		},
 		password: String,
 		dayClub: String,
+		dayClubRank: Number,
 		nickName: String,
 		description: String,
 		socialMedia: {},
