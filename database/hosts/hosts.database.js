@@ -70,6 +70,7 @@
 				nightClub: '',
 				mobile: '',
 				email: info.email,
+				photoInfo: '',
 				password: info.password,
 				dayClub: '',
 				nickName: '',
@@ -242,6 +243,7 @@
 			host.nickName    = info.nickName;
 			host.description = info.description;
 			host.socialMedia = info.socialMedia;
+			host.photoInfo   = info.photoInfo;
 
 			host.save(function (error) {
 				if (error) {

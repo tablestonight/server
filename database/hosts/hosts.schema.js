@@ -12,6 +12,7 @@
 		},
 		password: String,
 		dayClub: String,
+		photoInfo: String,
 		nickName: String,
 		description: String,
 		socialMedia: {},
