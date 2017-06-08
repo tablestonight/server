@@ -112,11 +112,16 @@
 	}
 
 	function sendConfirmationEmail(email, uuid) {
+
+		var body = '<b>Thanks for signing up! </b> Please verify your account by clicking the link below:<br /><a href="' + process.env.URL + uuid + '">Verify your account</a>';
+
+		console.log('body', body);
+
 		var mailOptions = {
 		    from: '"Connect Vegas Bot" <contact.connect.vegas@gmail.com>',
 		    to: email,
 		    subject: 'Welcome to Connect Vegas | Verify your account',
-		    html: '<b>Thanks for signing up! </b> Please verify your account by clicking the link below:<br /><a href="' + process.env.URL + uuid + '">Verify your account</a>'
+		    html: body
 		};
 
 		// send mail with defined transport object
