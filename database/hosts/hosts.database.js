@@ -3,7 +3,8 @@
 	var bcrypt = require('bcrypt');
 	var Q = require("q");
 	var nodemailer = require('nodemailer');
-	var transporter = nodemailer.createTransport({
+	var smtpTransport = require('nodemailer-smtp-transport');
+	var transporter = nodemailer.createTransport(smtpTransport({
 	  service: 'Gmail',
 	  //host: 'myhost',
 	  port: 465,
@@ -12,7 +13,7 @@
 	    user: process.env.USERNAME,
 	    pass: process.env.PASSWORD
 	  }
-	});
+	}));
 	var uuid = require('node-uuid');
 	var Nightclubs = require('./../locations/nightclubs/nightclubs.info');
 	var Dayclubs = require('./../locations/dayclubs/dayclubs.info');
