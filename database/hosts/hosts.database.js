@@ -118,7 +118,7 @@
 			"In order to prevent anyone from signing up for an account, we would like to send you this " +
 			"verification e-mail.</p> " +
 			"Please verify your account by clicking the link below:<br /><a href='" +
-			process.env.URL + uuid + "'>Verify your account</a>";
+			process.env.URL + uuid + "'>Verify your account by clicking HERE or visiting:</a> " + process.env.URL + uuid;
 
 		console.log('body', body);
 
