@@ -31,5 +31,8 @@
     "mocha": "^2.0.1",
     "should": "^4.3.0",
     "supertest": "^0.15.0"
+  },
+  "engines": {
+    "node": "4.2.3"
   }
 }
