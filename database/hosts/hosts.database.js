@@ -113,12 +113,12 @@
 
 	function sendConfirmationEmail(email, uuid) {
 
-		var body = '<b>Thanks for signing up! </b>' +
-			'<p>You are one step closer to Connect Vegas. We are happy that you have chosen This platform. ' +
-			'In order to prevent anyone from signing up for an account, we would like to send you this ' +
-			'verification e-mail.</p> ' +
-			'Please verify your account by clicking the link below:<br /><a href="' +
-			process.env.URL + uuid + '">Verify your account</a>';
+		var body = "<b>Thanks for signing up! </b>" +
+			"<p>You are one step closer to Connect Vegas. We are happy that you have chosen This platform. " +
+			"In order to prevent anyone from signing up for an account, we would like to send you this " +
+			"verification e-mail.</p> " +
+			"Please verify your account by clicking the link below:<br /><a href='" +
+			process.env.URL + uuid + "'>Verify your account</a>";
 
 		console.log('body', body);
 
